@@ -12,7 +12,8 @@ This data anonymisation tool is for the de-identification of open-source RT data
 - frame_anonymiser.py is the function to anonymise the '_Frame.xml' files. This function read the tags of .xml files and replace the document in ‘FirstName’, ‘LastName’, ‘./Patient/ID’ with TROG ID. Also delete the documents with the tag ‘Description’.
 - kimlog_anonymiser.py is the function to anonymise the KIM logs file by deleting the file paths. First It detects whether the file contains a 'Filename' object. It grabs all the ‘Filename’ information check if the file names include '.tiff' or ‘. hnd', then delete the file path part of the file name, which may contain the centre/patient information.
 - dvh_anonymiser.py is the function to anonymise the .txt files with a ‘DVH’ in the file path. It browses the file and replaces the ‘Patient Name’ and ‘Patient ID’ information with TROG id.
-- anonymise_linac_traj.m is a matlab program to anonymise the linac trajectory logs(.bin file). It looks for the patient ID input by user in the trajectory logs and replaces them with the a fake ID which has the same size as the actual one. The program creates a new anonymised file and this file's name starts with 'anon', to distinguish with the original one. This function has not been merged into executable file.
+- linac_traj_anonymiser.py is the function to anonymise the linac trajectory logs(.bin file). User needs to input the patient ID in 'others' on the left bottom of the GUI and this function will look for the ID in the trajectory logs and replaces them with the a fake ID('1234567890') which has the same size as the actual one. After anonymisation it will create a new file rather than overwriting the original log file.
+
 
 ## How to use this tool
 
