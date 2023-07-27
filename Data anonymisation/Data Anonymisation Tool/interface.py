@@ -60,6 +60,10 @@ def main():
     label9.grid(row=8, column=0, pady=5)
     entry9.grid(row=8, column=1, pady=5)
 
+    # For user inputting some other information
+    label13.grid(row=9, column=0, pady=5)
+    entry13.grid(row=9, column=1, pady=5)
+
     # Create widgets under title "clinical trial data anonymisation tool"
     # For user selecting datatype to be anonymised
     label10.grid(row=0, column=0)

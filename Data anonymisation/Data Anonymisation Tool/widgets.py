@@ -10,6 +10,7 @@ from frame_anonymiser import *
 from dvh_anonymiser import *
 from centroid_anonymiser import *
 from acq_anonymiser import *
+from linac_traj_anonymiser import *
 
 win = Tk()
 
@@ -46,6 +47,9 @@ entry8 = Entry(frm_input, width=10)
 label9 = Label(frm_input, text="Notes")
 entry9 = Entry(frm_input, width=10)
 
+label13 = Label(frm_input, text="Others")
+entry13 = Entry(frm_input, width=10)
+
 # Create widgets for clinical Trial Data Anonymization Tool
 
 label10 = Label(frm_datatype, text="Data type: ")
@@ -59,10 +63,11 @@ data_type = [
     "Choose datatype",
     "DICOM",
     "KIM logs",
-    "Frame file",
-    "DVH file",
-    # "Centroid File",
+    "Frame files",
+    "DVH files",
+    # "Centroid files",
     # "Acquisition log",
+    "Linac trajectory logs"
 ]
 
 menu_datatype = StringVar(frm_datatype)
@@ -104,7 +109,9 @@ def open_file():
 def anonymise(filePath):
     # filePath = open_folder()
     trogID = entry11.get()
+    patID=entry13.get()
     count = 0
+
     if menu_datatype.get() == "Choose a datatype":
         pass
     elif menu_datatype.get() == "DICOM":
@@ -120,21 +127,25 @@ def anonymise(filePath):
         print(menu_datatype.get(), "are going to be anonymised.")
         count = ano_kimlogs(filePath)
 
-    elif menu_datatype.get() == "Frame file":
+    elif menu_datatype.get() == "Frame files":
         print(menu_datatype.get(), "files are going to be anonymised.")
         count = ano_frame(filePath, trogID)
 
-    elif menu_datatype.get() == "DVH file":
+    elif menu_datatype.get() == "DVH files":
         print(menu_datatype.get(), "are going to be anonymised.")
         count = ano_dvh(filePath, trogID)
 
-    elif menu_datatype.get() == "Centroid File":
+    elif menu_datatype.get() == "Centroid files":
         print(menu_datatype.get(), "files are going to be anonymised.")
         count = ano_centroid(filePath, trogID)
 
     elif menu_datatype.get() == "Acquisition log":
         print(menu_datatype.get(), "files are going to be anonymised.")
         count = ano_acq(filePath)
+
+    elif menu_datatype.get() == "Linac trajectory logs":
+        print(menu_datatype.get(), "files are going to be anonymised.")
+        count = ano_linac_traj(filePath, trogID, patID)
 
     print(f"Anonymised {count} file(s)")
 
