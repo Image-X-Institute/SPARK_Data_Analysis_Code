@@ -11,6 +11,7 @@ from dvh_anonymiser import *
 from centroid_anonymiser import *
 from acq_anonymiser import *
 from linac_traj_anonymiser import *
+from RPM_anonymiser import *
 
 win = Tk()
 
@@ -67,7 +68,8 @@ data_type = [
     "DVH files",
     # "Centroid files",
     # "Acquisition log",
-    "Linac trajectory logs"
+    "Linac trajectory logs",
+    "RPM files",
 ]
 
 menu_datatype = StringVar(frm_datatype)
@@ -146,6 +148,11 @@ def anonymise(filePath):
     elif menu_datatype.get() == "Linac trajectory logs":
         print(menu_datatype.get(), "files are going to be anonymised.")
         count = ano_linac_traj(filePath, trogID, patID)
+
+    elif menu_datatype.get() == "RPM files":
+        print(menu_datatype.get(), "files are going to be anonymised.")
+        count = ano_RPM(filePath, trogID)
+
 
     print(f"Anonymised {count} file(s)")
 
