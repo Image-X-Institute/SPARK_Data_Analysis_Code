@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter import scrolledtext
 import os
-import threading
+from threading import Thread
 
 from dicom_anonymiser import *
 from kimlog_anonymiser import *
@@ -158,11 +158,11 @@ def anonymise(filePath):
 
 
 def start_anonymise_by_folder():
-    threading.Thread(target=anonymise, args=(open_folder(),)).start()
+    Thread(target=anonymise, args=(open_folder(),)).start()
 
 
 def start_anonymise_by_file():
-    threading.Thread(target=anonymise, args=(open_file(),)).start()
+    Thread(target=anonymise, args=(open_file(),)).start()
 
 
 button1 = Button(
@@ -172,6 +172,7 @@ button2 = Button(
     frm_datatype, text="Anonymise by file", command=start_anonymise_by_file
 )
 
+# The StoutRedirector class is to redirect the output from terminal to textbox.
 class StdoutRedirector(object):
 
     def __init__(self, text_area):

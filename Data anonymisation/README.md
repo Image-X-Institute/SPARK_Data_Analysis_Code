@@ -5,20 +5,20 @@ This data anonymisation tool is for the de-identification of open-source RT data
 
 ## What are these files
 
-- interface.py is the main program to start a GUI. If you have python environment in their pc/laptop, you can run this file and start anonymisation.
+- GUI.py is the main program to start a GUI. If you have python environment in their pc/laptop, you can run this file and start anonymisation.
 - widgets.py contains all the widgets used in GUI and related functions the tool needs. If you want to add more functions, you can add the widgets here first and then then add the functions that the widget needs to call.
 - dicom_anonymiser.py is to anonymise the DICOM files by reading the DICOM files header, replacing the patients’ information like ‘Patient’s Name’, ‘Patient ID’, ‘Patient’s Birth Date’, with TROG id or deleting other information like ‘Institution Name’. You can find more details in dicom_anonymisation_rules_default.json.
 - dicom_anonymisation_rules_default.json is the rules of anonymising DICOM files , following the standards in https://wiki.cancerimagingarchive.net/display/Public/Submission+and+De-identification+Overview. To anonymise the DICOM files this rule should be in the same folder as interface.exe.
 - frame_anonymiser.py is the function to anonymise the '_Frame.xml' files. This function read the tags of .xml files and replace the document in ‘FirstName’, ‘LastName’, ‘./Patient/ID’ with TROG ID. Also delete the documents with the tag ‘Description’.
 - kimlog_anonymiser.py is the function to anonymise the KIM logs file by deleting the file paths. First It detects whether the file contains a 'Filename' object. It grabs all the ‘Filename’ information check if the file names include '.tiff' or ‘. hnd', then delete the file path part of the file name, which may contain the centre/patient information.
 - dvh_anonymiser.py is the function to anonymise the .txt files with a ‘DVH’ in the file path. It browses the file and replaces the ‘Patient Name’ and ‘Patient ID’ information with TROG id.
-- linac_traj_anonymiser.py is the function to anonymise the linac trajectory logs(.bin file). User needs to input the patient ID in 'others' on the left bottom of the GUI and this function will look for the ID in the trajectory logs and replaces them with the a fake ID('1234567890') which has the same size as the actual one. After anonymisation it will create a new file rather than overwriting the original log file.
+- linac_traj_anonymiser.py is the function to anonymise the linac trajectory logs(.bin file). User needs to input the patient ID in 'others' on the left bottom of the GUI and this function will look for the ID in the trajectory logs and replaces them with the a fake ID('1234567890') which has the same size as the actual one. After anonymisation it will create a new file in the same folder and the patient number in the original file name has been replaced with TROG ID
 - RPM_anonymiser.py is the function to anonymise the RPM(.vxp) files. It replaces the patient ID in the file with trial ID and then rename the file. The trial ID is input by user. In current version there is no special place for trial ID, user can input the trial ID into 'TROG ID'.
 
 
 ## How to use this tool
 
-1. Download this repo to your local drive. If you have a python environment, you can start by running the ‘interface.py’ in the code editor. If you don’t have a python environment or know python, please download the executable file in the Releases.
+1. Download this repo. If you have a python environment, you can start by running the ‘GUI.py’ in the code editor. If you don’t have a python environment or know python, please download the executable file in the Releases.
 
 ![Data anonymisation tool GUI](docsrc/images/data_anonymisation_tool_GUI.png)
 
