@@ -38,4 +38,45 @@ This data anonymisation tool is for the de-identification of open-source RT data
 
 ![Output result](docsrc/images/data_anonymisation_tool_result_output.png)
 
-6. For acquisition files and KIM logs you don't need to input the TROG ID, it only deletes the certain information. But if you really want to input something in the input box, help yourself and it won’t affect the anonymisation result.
+6. For acquisition files and KIM logs you don’t need to input the TROG ID, it only deletes the certain information. But if you really want to input something in the input box, help yourself and it won’t affect the anonymisation result.
+
+---
+
+## LEARN Trial — Linac Trajectory Log Anonymisation
+
+The `trajectory_learn` data type is a new anonymisation option added for the LEARN clinical trial. It is an updated version of `linac_traj_anonymiser.py` with the following differences and improvements.
+
+### New file
+
+- `linac_traj_anonymiser_learn.py` contains the `ano_linac_traj_learn()` function. Select **trajectory_learn** from the data type dropdown to use it.
+
+### How it differs from the original linac trajectory anonymiser
+
+| | Original (`linac_traj_anonymiser.py`) | LEARN (`linac_traj_anonymiser_learn.py`) |
+|---|---|---|
+| Patient ID source | Manually entered in "Others" field | Auto-extracted from inside the file (`Patient ID:` field), falls back to filename prefix, or manually entered in "Replace with TROG ID" |
+| Replacement ID | Sequential digits (`123456789...`) | TROG/REDCap ID entered by user, right-padded with `x` to match original length |
+| Occurrences replaced | First occurrence only | All occurrences |
+| Encoding | UTF-8 (may fail for non-ASCII IDs) | Latin-1 (matches binary file encoding) |
+| Path handling | Unix `/` separator only | Cross-platform (`os.path`) |
+
+### How to use
+
+1. In the **Treatment Summary** panel on the left, enter the TROG/REDCap ID in the **TROG patient id** field. This is the de-identified ID that will replace the original patient ID. This field is compulsory — anonymisation will not proceed without it.
+
+2. Optionally, if the patient ID cannot be detected automatically from the file (e.g. a non-standard file from a different hospital), enter the original patient ID manually in the **Replace with TROG ID** field on the right. If left blank, the tool will attempt to extract the patient ID from the `Patient ID:` text field inside the binary file, then fall back to the filename prefix before the first underscore.
+
+3. Select **trajectory_learn** from the data type dropdown.
+
+4. Click **Anonymise by file** and select the `.bin` trajectory log file.
+
+### What gets anonymised
+
+The patient ID string is replaced everywhere it appears inside the binary file and in the output filename. The replacement string is the TROG/REDCap ID right-padded with `x` characters to exactly match the original patient ID length. This ensures all byte offsets in the file are preserved, so the anonymised file remains readable by downstream processing software (e.g. the Varian TrueBeam trajectory log MATLAB reader).
+
+All other data in the file — gantry angles, MLC leaf positions, couch positions, beam output, and timing — is untouched.
+
+### Helper scripts
+
+- `trajectory_inspect.py` — extracts and prints all readable text strings found in a `.bin` file, with their byte offsets. Useful for inspecting what identifiable information is present before anonymisation. Run from terminal: `python trajectory_inspect.py "path\to\file.bin"`
+- `tracjectory_read.py` — compares specific fields (Patient ID, Plan Name, Plan UID, BeamName) between a before and after file to verify anonymisation. Update the hardcoded file paths at the top of the script before running.

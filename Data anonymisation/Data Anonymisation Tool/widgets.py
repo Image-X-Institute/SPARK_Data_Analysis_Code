@@ -11,6 +11,7 @@ from dvh_anonymiser import *
 from centroid_anonymiser import *
 from acq_anonymiser import *
 from linac_traj_anonymiser import *
+from linac_traj_anonymiser_learn import *
 from RPM_anonymiser import *
 
 win = Tk()
@@ -69,12 +70,14 @@ data_type = [
     # "Centroid files",
     # "Acquisition log",
     "Linac trajectory logs",
+    "trajectory_learn",
     "RPM files",
 ]
 
 menu_datatype = StringVar(frm_datatype)
 menu_datatype.set(data_type[0])
 menu1 = OptionMenu(frm_datatype, menu_datatype, *data_type)
+
 
 linac = ["none"]
 
@@ -148,6 +151,15 @@ def anonymise(filePath):
     elif menu_datatype.get() == "Linac trajectory logs":
         print(menu_datatype.get(), "files are going to be anonymised.")
         count = ano_linac_traj(filePath, trogID, patID)
+
+    elif menu_datatype.get() == "trajectory_learn":
+        redcapID = entry2.get()
+        originalPatID = entry11.get()
+        if not redcapID.strip():
+            print("Error: TROG patient ID is required. Please enter it in the Treatment Summary on the left.")
+            return
+        print(menu_datatype.get(), "files are going to be anonymised.")
+        count = ano_linac_traj_learn(filePath, redcapID, originalPatID)
 
     elif menu_datatype.get() == "RPM files":
         print(menu_datatype.get(), "files are going to be anonymised.")
