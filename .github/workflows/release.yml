@@ -1,0 +1,31 @@
+name: Build and Release Executable
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pyinstaller pydicom python-magic-bin
+
+      - name: Build executable
+        working-directory: 'Data anonymisation/Data Anonymisation Tool'
+        run: pyinstaller data_anonymisation.spec
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: 'Data anonymisation/Data Anonymisation Tool/dist/DataAnonymisationTool.exe'
+          generate_release_notes: true

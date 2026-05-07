@@ -19,10 +19,10 @@ def getDefaultDeIdentificationConfig() -> Dict:
     # electronic medical records for radiation therapy. Comput Biol Med.
     # 2014;53:134-140. doi:10.1016/j.compbiomed.2014.07.010
     # try:
-    #     basePath = sys._MEIPASS  # created by pyinstaller
-    # except Exception:
-    #     basePath = os.path.abspath(".")
-    basePath = os.path.abspath(".")
+    try:
+        basePath = sys._MEIPASS  # set by PyInstaller at runtime
+    except AttributeError:
+        basePath = os.path.abspath(".")
     defaultConfigFilePath = os.path.join(
         basePath, "dicom_anonymisation_rules_default.json"
     )
