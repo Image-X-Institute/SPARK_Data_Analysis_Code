@@ -12,6 +12,7 @@ from centroid_anonymiser import *
 from acq_anonymiser import *
 from linac_traj_anonymiser import *
 from linac_traj_anonymiser_learn import *
+from cbct_recon_anonymiser import *
 from RPM_anonymiser import *
 
 win = Tk()
@@ -71,6 +72,7 @@ data_type = [
     # "Acquisition log",
     "Linac trajectory logs",
     "trajectory_learn",
+    "CBCT reconstruction",
     "RPM files",
 ]
 
@@ -160,6 +162,10 @@ def anonymise(filePath):
             return
         print(menu_datatype.get(), "files are going to be anonymised.")
         count = ano_linac_traj_learn(filePath, redcapID, originalPatID)
+
+    elif menu_datatype.get() == "CBCT reconstruction":
+        print(menu_datatype.get(), "files are going to be anonymised.")
+        count = ano_cbct_recon(filePath)
 
     elif menu_datatype.get() == "RPM files":
         print(menu_datatype.get(), "files are going to be anonymised.")
