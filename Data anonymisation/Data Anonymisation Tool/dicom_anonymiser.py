@@ -56,10 +56,18 @@ def anonymise(
                 showProgress,
                 variables,
             )
-    elif os.path.isfile(filePath) and "application/dicom" == magic.from_file(
-        filePath, mime=True
-    ):
-        ds: dcm.FileDataset = dcm.dcmread(filePath)
+    elif os.path.isfile(filePath) and magic.from_file(filePath, mime=True) in ('application/dicom', 'application/octet-stream'):
+
+        # BC: Varian CBCT reconstructions have a different mime type. For these,
+        # force dicom read and check a tag, e.g. modality.
+        if magic.from_file(filePath, mime=True) == "application/octet-stream": 
+            print(f"BC - application/octet-stream file detected: {filePath}")
+            ds: dcm.FileDataset = dcm.dcmread(filePath, force=True)
+            if not hasattr(ds, "Modality"):
+                return numberOfFileAnonymised
+        else:
+            ds: dcm.FileDataset = dcm.dcmread(filePath)
+
         if verbose:
             print(f"Processing {filePath} for anonymisation")
         for tagToBeAnonymised in deIdentificationConfig["tags"]:
